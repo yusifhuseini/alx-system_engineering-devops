@@ -1,29 +1,24 @@
-# A manifest to install nginx web server
+# Setup New Ubuntu server with nginx
 
-exec { 'apt-get update':
-  command => '/usr/bin/apt-get -y update',
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
 }
 
 package { 'nginx':
-  ensure  => 'installed',
-  require => Exec['apt-get update'],
+	ensure => 'installed',
+	require => Exec['update system']
 }
 
-file { 'index-html':
-  ensure  => 'present',
-  path    => '/var/www/html/index.html',
-  content => 'Hello World!',
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
 }
 
-file_line { 'redirect':
-  path    => '/etc/nginx/sites-available/default',
-  after   => 'server_name _;',
-  line    => 'rewrite ^/redirect_me https://www.google.com permanent;',
-  notify  => Service['nginx'],
-  require => Package['nginx'],
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
 }
 
-service { 'nginx':
-  ensure => running,
-  enable => true,
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
 }
