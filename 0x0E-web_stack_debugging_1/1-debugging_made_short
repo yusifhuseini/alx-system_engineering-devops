@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# configures a server to listening on port 80 of all servers active IPv4 IPs
+# Make it short and sweet
 
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-service nginx start
-rm -rf /var/run/nginx.pid
+echo 'listen 80;' > /etc/nginx/sites-available/default
+service nginx restart
