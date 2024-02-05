@@ -12,7 +12,7 @@ Write a blog post explaining what happens when you type https://www.google.com i
   containing the link to a diagram put togeter to visualize the networking
   process described in my blog.
 
-* **2.**
+* **2. My Contribution**
   * [2-contribution-to_what-happens-when_github_answer](./2-contribution-to_what-happens-when_github_answer):
   folks on the Internet have been trying to put together a comprehensive
   answer to the question. The task is to contribute to this topic via this
