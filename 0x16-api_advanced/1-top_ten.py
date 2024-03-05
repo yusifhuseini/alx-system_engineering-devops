@@ -1,24 +1,24 @@
 #!/usr/bin/python3
-'''
-    this module contains the function top_ten
-'''
+"""A script that gets top ten articles for a subreddit"""
+import json
 import requests
-from sys import argv
 
 
 def top_ten(subreddit):
-    '''
-        returns the top ten posts for a given subreddit
-    '''
-    user = {'User-Agent': 'Lizzie'}
-    url = requests.get('https://www.reddit.com/r/{}/hot/.json?limit=10'
-                       .format(subreddit), headers=user).json()
-    try:
-        for post in url.get('data').get('children'):
-            print(post.get('data').get('title'))
-    except Exception:
-        print(None)
+    """Function that requests the top ten articles for a subreddit"""
 
+    URL = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
 
-if __name__ == "__main__":
-    top_ten(argv[1])
+    params = {'limit': 10}
+    headers = {'User-Agent': ''}
+    r = requests.get(URL, headers=headers, params=params)
+    if (r.status_code != 200):
+        print('None')
+        return
+    r = r.json()
+    posts = r['data']['children'][0:10]
+    if len(posts) == 0:
+        print('None')
+        return
+    for post in posts:
+        print(post['data']['title'])
