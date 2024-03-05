@@ -2,7 +2,7 @@
 """
 Defines a function that queries Reddit API
 """
-import requests
+import requests, json
 
 
 def number_of_subscribers(subreddit):
