@@ -1,18 +1,16 @@
 #!/usr/bin/python3
-""" gets the number of subs for a subredit """
-import json
+"""Function to query subscribers on a given Reddit subreddit."""
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """function that takes a subredit and returns number of subs"""
-    user_agent = {"User-Agent": "unix:0-subs.py:v1.0"}
-    data = requests.get("https://www.reddit.com/r/{}/about.json"
-                        .format(subreddit),
-                        headers=user_agent,
-                        allow_redirects=False)
-    if data.status_code != 200:
+    """Return the total number of subscribers on a given subreddit."""
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    headers = {
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
+    }
+    response = requests.get(url, headers=headers, allow_redirects=False)
+    if response.status_code == 404:
         return 0
-    json_data = data.json()
-    results = json_data.get("data").get("subscribers")
-    return results
+    results = response.json().get("data")
+    return results.get("subscribers")

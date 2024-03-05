@@ -1,31 +1,28 @@
 #!/usr/bin/python3
-"""
-Defines a function that queries Reddit API
-"""
-import requests
+"""Module for task 2"""
 
 
-def recurse(subreddit, hot_list=[], after=None):
-    """
-    Queries the Reddit API and returns a list containing
-    the titles of all hot articles for a given subreddit.
-    Args:
-        subreddit (str): name of a subreddit
-    Return:
-        titles (list): a list of hot subreddit titles
-        None: if subreddit is not valid
-    """
-    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    params = {'after': after, 'limit': 100}
-    headers = {'User-Agent': 'advanced-api/0.0.1 by Mendy'}
-    req = requests.get(url, params=params,
-                       headers=headers, allow_redirects=False)
-    if req.status_code == 200:
-        response = req.json()
-        hot_list = [child['data']['title']
-                    for child in response['data']['children']]
-        after = response['data']['after']
-        if after is not None:
-            hot_list += recurse(subreddit, after=after)
-        return hot_list
-    return None
+def recurse(subreddit, hot_list=[], count=0, after=None):
+    """Queries the Reddit API and returns all hot posts
+    of the subreddit"""
+    import requests
+
+    sub_info = requests.get("https://www.reddit.com/r/{}/hot.json"
+                            .format(subreddit),
+                            params={"count": count, "after": after},
+                            headers={"User-Agent": "My-User-Agent"},
+                            allow_redirects=False)
+    if sub_info.status_code >= 400:
+        return None
+
+    hot_l = hot_list + [child.get("data").get("title")
+                        for child in sub_info.json()
+                        .get("data")
+                        .get("children")]
+
+    info = sub_info.json()
+    if not info.get("data").get("after"):
+        return hot_l
+
+    return recurse(subreddit, hot_l, info.get("data").get("count"),
+                   info.get("data").get("after"))
