@@ -13,7 +13,7 @@ def top_ten(subreddit):
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     headers = {'User-Agent': 'advanced-api/0.0.1 by Huseini'}
     req = requests.get(url=url, headers=headers, allow_redirects=False)
-    if req.status_code == 200:
+    if req.status_code == 200 and req.content:
         response = req.json()
         titles = [child['data']['title']
                   for child in response['data']['children'][:10]]
