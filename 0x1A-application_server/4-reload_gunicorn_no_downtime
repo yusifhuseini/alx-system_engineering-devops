@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
-# Shutting gunicorn master and workers gracefully
 
-pgrep gunicorn | xargs kill -HUP 
+# Find the process IDs of Gunicorn workers
+worker_pids=$(ps aux | grep '[g]unicorn' | awk '{print $2}')
+
+# Print the current worker PIDs
+echo "Current Gunicorn worker PIDs: $worker_pids"
+
+# Send a graceful reload signal to each worker
+for pid in $worker_pids; do
+    echo "Sending graceful reload signal to worker $pid"
+    kill -HUP $pid
+done
+
+# Print a message indicating the reload process is complete
+echo "Gunicorn reload complete"
+
+
+# Shutting gunicorn master and workers gracefully
+# pgrep gunicorn | xargs kill -HUP 
