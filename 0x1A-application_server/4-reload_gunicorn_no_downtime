@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-
-ps aux | grep '[g]unicorn' | awk '{print $2}' | xargs -I {} kill -HUP {}
+# Shutting gunicorn master and workers gracefully
+pgrep gunicorn | xargs kill -HUP 
