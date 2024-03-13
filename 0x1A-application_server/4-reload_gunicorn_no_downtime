@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-
-# Shutting gunicorn master and workers gracefully
-# pgrep gunicorn | xargs kill -HUP
+# Gracefully updates gunicorn workers
 
 pkill -HUP gunicorn
