@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
-# Gracefuuly reloads Gunicorn
 
-pkill -HUP -f gunicorn
+# Get the Gunicorn master process ID (PID)
+gunicorn_pid=$(ps aux | grep gunicorn | grep -v grep | awk '{print $2}')
+
+# Check if Gunicorn process is found
+if [[ -z "$gunicorn_pid" ]]; then
+  echo "Gunicorn process not found!"
+  exit 1
+fi
+
+# Send HUP signal to the master process for graceful reload
+kill -HUP "$gunicorn_pid"
+
+echo "Gunicorn reloading..."
+
+# Wait for some time to allow Gunicorn to complete reload (optional)
+sleep 5
+
+echo "Reload completed!"
